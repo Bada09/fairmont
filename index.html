@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rhapsody | Manual técnico de uso</title>
+<style>
+:root{
+  --bg:#ffffff;
+  --bg-soft:#f8f8fc;
+  --surface:#ffffff;
+  --surface-2:#f2f2f6;
+  --line:rgba(0,0,0,.12);
+  --line-strong:rgba(0,0,0,.2);
+  --text:#1e1e2a;
+  --muted:#4a4a5a;
+  --dim:#6c6c7a;
+  --accent:#9b7bff;      /* lilás principal */
+  --accent-light:#b69eff;
+  --cyan:#5f9ea0;
+  --green:#2e7d64;
+  --warm:#d97706;
+  --danger:#dc2626;
+  --maxw:1160px;
+  --radius:8px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  min-height:100vh;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Segoe UI",Inter,-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+  line-height:1.65;
+}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+strong{color:var(--text)}
+code,kbd,.mono{font-family:"Cascadia Code","Fira Code",Consolas,monospace}
+::selection{background:rgba(155,123,255,.25)}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:#eaeaef}
+::-webkit-scrollbar-thumb{background:#bcbcd0;border-radius:8px}
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:20;height:66px;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  padding:0 36px;background:rgba(255,255,255,.92);border-bottom:1px solid var(--line);
+  backdrop-filter:blur(18px);
+}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.brand-lockup{display:flex;flex-direction:column;line-height:1.15}
+.brand-name{font-weight:800;font-size:.98rem;color:var(--text)}
+.brand-sub{color:var(--dim);font-size:.76rem}
+.nav-links{display:flex;align-items:center;gap:18px;color:var(--muted);font-size:.84rem}
+.nav-links a{padding:6px 0;border-bottom:1px solid transparent}
+.nav-links a:hover,.nav-links a.active{color:var(--text);border-color:var(--accent)}
+.nav-pill{
+  border:1px solid rgba(46,125,100,.28);color:var(--green);padding:7px 12px;
+  border-radius:8px;font-weight:700;white-space:nowrap;
+}
+.tricolor{height:3px;background:linear-gradient(90deg,#002395 0 33%,#fff 33% 66%,#009c3b 66% 100%);opacity:.75}
+.wrap{width:min(100% - 48px,var(--maxw));margin:0 auto}
+.section{padding:92px 0;border-top:1px solid rgba(0,0,0,.06)}
+.section:first-of-type{border-top:0}
+.kicker{display:inline-flex;align-items:center;gap:10px;color:var(--accent);font-weight:800;font-size:.82rem;margin-bottom:18px}
+.kicker::before{content:"";width:22px;height:2px;background:var(--accent);border-radius:8px}
+.headline{font-size:3rem;line-height:1.08;font-weight:850;margin-bottom:18px;color:var(--text)}
+.headline small{display:block;color:var(--muted);font-size:1.15rem;font-weight:650;margin-bottom:10px}
+.lead{color:var(--muted);font-size:1.12rem;max-width:760px}
+.mono{color:var(--accent);font-weight:500}
+.hero{min-height:100vh;display:grid;align-items:center;padding:116px 0 58px;position:relative;overflow:hidden}
+.hero::before{
+  content:"";position:absolute;inset:66px 0 auto 0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent-light),transparent);
+}
+.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:54px;align-items:center}
+.manual-mark{
+  display:inline-flex;align-items:center;gap:12px;padding:8px 12px;border:1px solid var(--line);
+  background:rgba(0,0,0,.02);border-radius:8px;margin-bottom:24px;color:var(--muted);font-size:.9rem;
+}
+.status-dot{width:9px;height:9px;border-radius:999px;background:var(--green);box-shadow:0 0 12px rgba(46,125,100,.4)}
+.title{font-size:4.6rem;line-height:.98;font-weight:900;margin-bottom:24px;color:var(--text)}
+.title span{color:var(--accent)}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;
+  border-radius:8px;border:1px solid var(--line-strong);color:var(--text);font-weight:800;
+  background:rgba(0,0,0,.02);transition:transform .18s,border-color .18s,background .18s;
+}
+.btn:hover{transform:translateY(-2px);border-color:var(--accent);background:rgba(155,123,255,.08)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.device{border:1px solid var(--line-strong);background:var(--surface);border-radius:8px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.08)}
+.device-top,.panel-head{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;
+  border-bottom:1px solid var(--line);color:var(--dim);font-family:"Cascadia Code","Fira Code",Consolas,monospace;font-size:.78rem;
+}
+.traffic{display:flex;gap:7px}
+.traffic span{width:10px;height:10px;border-radius:999px;display:block}
+.traffic span:nth-child(1){background:var(--danger)}
+.traffic span:nth-child(2){background:var(--warm)}
+.traffic span:nth-child(3){background:var(--green)}
+.device-body{padding:26px}
+.app-card{border:1px solid var(--line);border-radius:8px;background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.01));padding:22px}
+.app-card + .app-card{margin-top:14px}
+.app-row{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:16px}
+.chip{
+  display:inline-flex;align-items:center;gap:8px;padding:5px 10px;border:1px solid var(--line);
+  border-radius:8px;color:var(--muted);font-size:.78rem;white-space:nowrap;
+}
+.chip.green{border-color:rgba(46,125,100,.24);color:var(--green)}
+.app-title{font-size:1.08rem;font-weight:800;color:var(--text)}
+.meter{height:9px;border-radius:8px;background:#e6e6ed;overflow:hidden}
+.meter span{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--accent));border-radius:8px}
+.spec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+.spec{border:1px solid var(--line);border-radius:8px;padding:12px;background:var(--bg-soft)}
+.spec b{display:block;font-size:1.22rem;line-height:1.2;color:var(--text)}
+.spec small{color:var(--dim)}
+.toc{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:44px}
+.toc a{min-height:132px;border:1px solid var(--line);border-radius:8px;background:rgba(0,0,0,.02);padding:18px;transition:transform .18s,border-color .18s,background .18s}
+.toc a:hover{transform:translateY(-4px);border-color:var(--accent);background:rgba(155,123,255,.06)}
+.toc b{display:block;font-size:1.02rem;margin-bottom:6px;color:var(--text)}
+.toc span{display:block;color:var(--muted);font-size:.88rem}
+.toc .num{color:var(--accent);font-family:"Cascadia Code","Fira Code",Consolas,monospace;font-size:.78rem;margin-bottom:12px}
+.doc-block{margin-top:44px;display:grid;grid-template-columns:280px 1fr;gap:34px;align-items:start}
+.doc-label{position:sticky;top:92px;border-left:3px solid var(--accent);padding-left:18px}
+.doc-label .num{color:var(--accent);font-family:"Cascadia Code","Fira Code",Consolas,monospace;font-weight:800;margin-bottom:8px}
+.doc-label h3{font-size:1.7rem;line-height:1.18;margin-bottom:10px;color:var(--text)}
+.doc-label p{color:var(--muted);font-size:.94rem}
+.panel{border:1px solid var(--line);border-radius:8px;background:var(--surface);overflow:hidden}
+.panel-head{background:rgba(0,0,0,.02)}
+.panel-body{padding:24px}
+.steps{display:grid;gap:14px}
+.step{display:grid;grid-template-columns:46px 1fr;gap:16px;padding:16px;border:1px solid rgba(0,0,0,.08);border-radius:8px;background:var(--bg-soft)}
+.step-num{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;background:rgba(155,123,255,.12);color:var(--accent);font-weight:900;font-family:"Cascadia Code","Fira Code",Consolas,monospace}
+.step h4{font-size:1.02rem;margin-bottom:4px;color:var(--text)}
+.step p{color:var(--muted);font-size:.95rem}
+.callout{border:1px solid rgba(95,158,160,.24);border-left:3px solid var(--cyan);border-radius:8px;background:rgba(95,158,160,.045);padding:18px;margin-top:18px}
+.callout strong{display:block;margin-bottom:4px;color:var(--cyan)}
+.callout p{color:var(--muted);font-size:.95rem}
+.callout.warn{border-color:rgba(217,119,6,.2);border-left-color:var(--warm);background:rgba(217,119,6,.05)}
+.callout.warn strong{color:var(--warm)}
+.callout.ok{border-color:rgba(46,125,100,.2);border-left-color:var(--green);background:rgba(46,125,100,.05)}
+.callout.ok strong{color:var(--green)}
+.matrix{width:100%;border-collapse:collapse}
+.matrix th,.matrix td{text-align:left;vertical-align:top;padding:14px 16px;border-top:1px solid rgba(0,0,0,.07);color:var(--muted)}
+.matrix th{border-top:0;color:var(--accent);font-size:.78rem;font-family:"Cascadia Code","Fira Code",Consolas,monospace;background:rgba(155,123,255,.08)}
+.matrix td:first-child{color:var(--text);font-weight:800}
+.matrix td code{color:var(--accent)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{border:1px solid var(--line);border-radius:8px;background:rgba(0,0,0,.02);padding:18px}
+.card .icon{display:grid;place-items:center;width:36px;height:36px;border-radius:8px;background:rgba(155,123,255,.12);color:var(--accent);margin-bottom:14px;font-weight:900}
+.card h4{font-size:1rem;margin-bottom:6px;color:var(--text)}
+.card p{font-size:.92rem;color:var(--muted)}
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:22px}
+.flow-item{min-height:126px;border:1px solid var(--line);border-radius:8px;padding:16px;background:rgba(0,0,0,.02);position:relative}
+.flow-item::after{content:"";position:absolute;top:50%;right:-8px;width:8px;height:1px;background:var(--line-strong)}
+.flow-item:last-child::after{display:none}
+.flow-item b{display:block;margin-bottom:6px;color:var(--text)}
+.flow-item span{display:block;color:var(--muted);font-size:.88rem}
+.terminal{border:1px solid var(--line);border-radius:8px;background:#fafafd;overflow:hidden;margin-top:18px}
+.terminal pre{white-space:pre-wrap;padding:20px;color:#2d2d3a;font-size:.9rem;line-height:1.7}
+.terminal .prompt{color:var(--green)}
+.terminal .key{color:var(--accent)}
+.terminal .value{color:var(--warm)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.definition{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:14px 0;border-top:1px solid rgba(0,0,0,.07)}
+.definition:first-child{border-top:0;padding-top:0}
+.definition b{color:var(--text)}
+.definition p{color:var(--muted);font-size:.94rem}
+.print-note{margin-top:36px;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px;border:1px solid var(--line);border-radius:8px;background:rgba(0,0,0,.02)}
+.print-note p{color:var(--muted)}
+footer{padding:44px 0;background:#f4f4f9;border-top:1px solid var(--line)}
+.footer-grid{display:flex;justify-content:space-between;align-items:center;gap:28px}
+.footer-brand{display:flex;align-items:center;gap:14px}
+.footer-brand p,.footer-meta{color:var(--dim);font-size:.9rem}
+.footer-brand strong{display:block;color:rgba(0,0,0,.72)}
+.footer-meta{text-align:right}
+.rev{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease}
+.rev.in{opacity:1;transform:none}
+@media (max-width:1020px){
+  .nav{padding:0 22px}
+  .nav-links a{display:none}
+  .hero-grid,.doc-block{grid-template-columns:1fr}
+  .doc-label{position:static}
+  .toc{grid-template-columns:repeat(2,1fr)}
+  .cards,.spec-grid{grid-template-columns:repeat(2,1fr)}
+  .flow{grid-template-columns:1fr 1fr}
+  .flow-item::after{display:none}
+}
+@media (max-width:680px){
+  body{background:var(--bg)}
+  .wrap{width:min(100% - 28px,var(--maxw))}
+  .nav{height:auto;min-height:64px;padding:10px 14px}
+  .brand-sub,.nav-pill{display:none}
+  .hero{padding-top:100px;min-height:auto}
+  .section{padding:64px 0}
+  .title{font-size:2.7rem}
+  .headline{font-size:2rem}
+  .lead{font-size:1rem}
+  .toc,.cards,.spec-grid,.split,.flow{grid-template-columns:1fr}
+  .step{grid-template-columns:1fr}
+  .definition{grid-template-columns:1fr;gap:4px}
+  .panel-body{padding:16px}
+  .matrix{display:block;overflow-x:auto}
+  .footer-grid,.print-note{align-items:flex-start;flex-direction:column}
+  .footer-meta{text-align:left}
+}
+@media print{
+  body{background:#fff;color:#111}
+  .nav,.hero-actions,.tricolor{display:none}
+  .hero{min-height:auto;padding:30px 0}
+  .section{page-break-inside:avoid;padding:32px 0}
+  .panel,.card,.toc a,.step,.device{box-shadow:none;border-color:#ccc;background:#fff}
+  .lead,.step p,.card p,.matrix td,.definition p,.callout p{color:#333}
+}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="brand" href="#top" aria-label="Voltar ao início">
+    <span class="brand-lockup">
+      <span class="brand-name">rhapsody</span>
+      <span class="brand-sub">Manual técnico de uso</span>
+    </span>
+  </a>
+  <div class="nav-links" aria-label="Navegação principal">
+    <a href="#mapa">Mapa</a>
+    <a href="#inicio">Início</a>
+    <a href="#run">Run</a>
+    <a href="#feedback">Feedback</a>
+    <a href="#seguranca">Segurança</a>
+    <a class="nav-pill" href="#suporte">v1.0 / 2026</a>
+  </div>
+</nav>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="rev">
+        <div class="manual-mark"><span class="status-dot"></span><span>Manual operacional · PC e smartphone</span></div>
+        <h1 class="title">Manual de uso <span>Rhapsody</span></h1>
+        <p class="lead">
+          Guia técnico para usuários, gestores e multiplicadores: acesso ao app, configuração de perfil, seleção de use cases, execução do Run, análise do debriefing, compartilhamento de resultados e boas práticas de governança.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#mapa">Abrir manual</a>
+          <a class="btn" href="#suporte">Ver troubleshooting</a>
+        </div>
+      </div>
+
+      <div class="device rev">
+        <div class="device-top">
+          <div class="traffic" aria-hidden="true"><span></span><span></span><span></span></div>
+          <span>rhapsody://manual/use-case-ready</span>
+        </div>
+        <div class="device-body">
+          <div class="app-card">
+            <div class="app-row">
+              <div>
+                <div class="chip green">perfil reconhecido</div>
+                <h2 class="app-title">Receber um cliente insatisfeito</h2>
+              </div>
+              <span class="chip">negociação</span>
+            </div>
+            <p style="color:var(--muted);font-size:.94rem">Objetivo pedagógico: manter escuta ativa, reformular o problema, reduzir tensão e propor encaminhamento viável.</p>
+            <div class="spec-grid">
+              <div class="spec"><b>Run</b><small>simulação oral</small></div>
+              <div class="spec"><b>IA</b><small>contraparte</small></div>
+              <div class="spec"><b>LGPD</b><small>controle de acesso</small></div>
+            </div>
+          </div>
+          <div class="app-card">
+            <div class="app-row">
+              <span class="chip">progresso do ciclo</span>
+              <span class="mono">78%</span>
+            </div>
+            <div class="meter" aria-label="Progresso do ciclo de prática"><span style="width:78%"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="tricolor"></div>
+
+  <section class="section" id="mapa">
+    <div class="wrap">
+      <p class="kicker rev">Mapa do documento</p>
+      <h2 class="headline rev"><small>Leia como um manual, use como checklist</small>Do primeiro acesso ao ciclo de melhoria contínua.</h2>
+      <p class="lead rev">Cada bloco segue a mesma lógica da apresentação de roteiro: contexto, passos operacionais, pontos de atenção e notas técnicas para treinamento interno.</p>
+
+      <div class="toc rev">
+        <a href="#inicio"><span class="num">01</span><b>Acesso e perfil</b><span>Entrada no app, reconhecimento do usuário, voz e idioma.</span></a>
+        <a href="#navegacao"><span class="num">02</span><b>Navegação</b><span>Histórico, Dashboard, Meu Espaço e filtros de catálogo.</span></a>
+        <a href="#usecases"><span class="num">03</span><b>Use cases</b><span>Seleção por competência, KPI e objetivo pedagógico.</span></a>
+        <a href="#run"><span class="num">04</span><b>Run</b><span>Execução da simulação em modo walkie-talkie.</span></a>
+        <a href="#feedback"><span class="num">05</span><b>Debriefing</b><span>Áudio, texto, nota, script e autoavaliação.</span></a>
+        <a href="#gestao"><span class="num">06</span><b>Gestão</b><span>Compartilhamento, repetição e comentários de melhoria.</span></a>
+        <a href="#seguranca"><span class="num">07</span><b>Segurança</b><span>Privacidade, LGPD, consentimento e boas práticas.</span></a>
+        <a href="#suporte"><span class="num">08</span><b>Suporte</b><span>Checklist rápido para problemas comuns.</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="inicio">
+    <div class="wrap doc-block">
+      <aside class="doc-label rev">
+        <div class="num">01 / ACCESS</div>
+        <h3>Acesso e configuração de perfil</h3>
+        <p>Primeiro bloco operacional para garantir que o usuário entre com o contexto correto antes de iniciar qualquer simulação.</p>
+      </aside>
+      <div class="panel rev">
+        <div class="panel-head"><span>module.access_profile</span><span>required</span></div>
+        <div class="panel-body">
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div><h4>Abrir o aplicativo</h4><p>Localize o ícone da Rhapsody no PC ou smartphone. Ao entrar, o sistema reconhece o perfil profissional e carrega os cenários liberados para sua função.</p></div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div><h4>Validar o contexto do usuário</h4><p>Confira se os use cases exibidos correspondem ao seu cargo, área ou trilha de aprendizagem. Caso a lista pareça incorreta, registre o caso com o gestor ou suporte.</p></div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div><h4>Ajustar voz e idioma</h4><p>Toque na foto no canto superior direito para acessar o perfil. Selecione a voz da IA e o idioma padrão de operação do aplicativo.</p></div>
+            </div>
+          </div>
+          <div class="callout ok">
+            <strong>Critério de pronto</strong>
+            <p>O usuário está pronto para treinar quando o catálogo aparece com cenários relevantes, o idioma está correto e a voz selecionada é adequada ao exercício.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="navegacao">
+    <div class="wrap doc-block">
+      <aside class="doc-label rev">
+        <div class="num">02 / NAVIGATION</div>
+        <h3>Mapa de navegação do app</h3>
+        <p>A barra inferior organiza consulta, acompanhamento e conteúdo do espaço pessoal.</p>
+      </aside>
+      <div class="panel rev">
+        <div class="panel-head"><span>module.bottom_navigation</span><span>3 tabs</span></div>
+        <div class="panel-body">
+          <table class="matrix">
+            <thead>
+              <tr><th>Área</th><th>Finalidade</th><th>Quando usar</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Histórico</td><td>Armazena use cases já realizados, scripts e resultados de runs concluídos.</td><td>Revisão pós-treinamento, comparação de evolução e retomada de um cenário já praticado.</td></tr>
+              <tr><td>Dashboard</td><td>Apresenta painéis e gráficos de desempenho vinculados à atividade do usuário.</td><td>Acompanhamento de frequência, qualidade dos runs e leitura de progresso individual.</td></tr>
+              <tr><td>Meu Espaço</td><td>Centraliza elementos de comunicação, mensagens e informações relacionadas ao aplicativo.</td><td>Consulta de orientações, materiais de apoio e comunicações internas.</td></tr>
+            </tbody>
+          </table>
+          <div class="callout">
+            <strong>Nota técnica</strong>
+            <p>O Dashboard deve ser interpretado como ferramenta de acompanhamento e desenvolvimento. O resultado de um run isolado não deve ser usado fora de contexto.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="usecases">
+    <div class="wrap doc-block">
+      <aside class="doc-label rev">
+        <div class="num">03 / USE_CASES</div>
+        <h3>Encontrar e selecionar cenários</h3>
+        <p>O catálogo funciona como biblioteca de situações reais de trabalho, filtrável por objetivo de desenvolvimento.</p>
+      </aside>
+      <div class="panel rev">
+        <div class="panel-head"><span>module.catalog_filters</span><span>competence + kpi</span></div>
+        <div class="panel-body">
+          <div class="cards">
+            <article class="card">
+              <div class="icon">A</div>
+              <h4>Todos os use cases</h4>
+              <p>Exibe a lista completa de cenários disponíveis para o perfil reconhecido. Útil para exploração inicial ou treinamentos livres.</p>
+            </article>
+            <article class="card">
+              <div class="icon">B</div>
+              <h4>Por competências</h4>
+              <p>Filtra por habilidades comportamentais ou comerciais, como negociação, escuta ativa, argumentação, gestão de conflito e feedback.</p>
+            </article>
+            <article class="card">
+              <div class="icon">C</div>
+              <h4>Por KPIs</h4>
+              <p>Relaciona o treino a indicadores de performance, como taxa de transformação, retenção, qualidade de atendimento ou conversão.</p>
+            </article>
+          </div>
+          <div class="terminal" aria-label="Exemplo de metadados de use case">
+            <div class="panel-head"><span>usecase.schema.example</span><span>read-only</span></div>
+            <pre><span class="prompt">use_case</span>: Receber um cliente insatisfeito
+<span class="key">competencia</span>: <span class="value">escuta ativa + resolução de conflito</span>
+<span class="key">kpi_relacionado</span>: <span class="value">satisfação / retenção</span>
+<span class="key">objetivo_pedagogico</span>: <span class="value">diagnosticar o problema, reduzir tensão e propor encaminhamento</span>
+<span class="key">papel_usuario</span>: <span class="value">consultor, atendente, vendedor ou gestor</span>
+<span class="key">papel_ia</span>: <span class="value">cliente insatisfeito</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="run">
+    <div class="wrap doc-block">
+      <aside class="doc-label rev">
+        <div class="num">04 / RUN</div>
+        <h3>Executar uma simulação</h3>
+        <p>O Run é a sessão prática. O usuário fala, a IA responde e a conversa evolui como role-play orientado por cenário.</p>
+      </aside>
+      <div class="panel rev">
+        <div class="panel-head"><span>module.run_session</span><span>walkie-talkie mode</span></div>
+        <div class="panel-body">
+          <div class="flow">
+            <div class="flow-item"><b>Selecionar</b><span>Toque no use case desejado e leia o contexto.</span></div>
+            <div class="flow-item"><b>Configurar</b><span>Escolha papel, voz e idioma da sessão.</span></div>
+            <div class="flow-item"><b>Iniciar</b><span>Toque em “Passar ao run”.</span></div>
+            <div class="flow-item"><b>Conversar</b><span>Pressione para falar e pressione novamente ao terminar.</span></div>
+            <div class="flow-item"><b>Encerrar</b><span>Finalize quando o objetivo pedagógico tiver sido explorado.</span></div>
+          </div>
+          <div class="split" style="margin-top:18px">
+            <div class="callout">
+              <strong>Modo walkie-talkie</strong>
+              <p>Toque uma vez para começar a falar. Toque novamente quando terminar. A IA responde em seguida, alternando os turnos da conversa.</p>
+            </div>
+            <div class="callout ok">
+              <strong>Uso em grupo</strong>
+              <p>O mesmo mecanismo permite exercícios coletivos, com uma pessoa ou um grupo respondendo à IA durante o role-play.</p>
+            </div>
+          </div>
+          <div class="callout warn">
+            <strong>Ponto de atenção</strong>
+            <p>Antes de iniciar, leia o objetivo pedagógico. Ele define o comportamento que será treinado e melhora a qualidade do debriefing.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="feedback">
+    <div class="wrap doc-block">
+      <aside class="doc-label rev">
+        <div class="num">05 / DEBRIEFING</div>
+        <h3>Resultados, feedback e evidências</h3>
+        <p>Após o Run, a plataforma organiza o aprendizado em formatos complementares para análise individual ou compartilhada.</p>
+      </aside>
+      <div class="panel rev">
+        <div class="panel-head"><span>module.run_results</span><span>post-session</span></div>
+        <div class="panel-body">
+          <div class="definition"><b>Debriefing em áudio</b><p>A IA apresenta verbalmente pontos fortes, oportunidades de melhoria e recomendações práticas para a próxima tentativa.</p></div>
+          <div class="definition"><b>Nota</b><p>A avaliação numérica é calculada com base nos critérios do exercício, mas só é gerada se o usuário solicitar.</p></div>
+          <div class="definition"><b>Script da conversa</b><p>Transcrição completa dos turnos da simulação, útil para revisar linguagem, objeções, argumentos e momentos de hesitação.</p></div>
+          <div class="definition"><b>Debriefing em texto</b><p>Versão escrita do feedback, adequada para estudo posterior, registro e comparação entre tentativas.</p></div>
+          <div class="definition"><b>Autoavaliação</b><p>O usuário avalia o próprio run, ajudando a qualificar cenários relevantes e consolidar metacognição.</p></div>
+          <div class="callout">
+            <strong>Leitura recomendada</strong>
+            <p>Combine três sinais: o que a IA apontou, o que aparece no script e o que o próprio usuário percebeu. Essa triangulação reduz leitura apressada de desempenho.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="gestao">
+    <div class="wrap doc-block">
+      <aside class="doc-label rev">
+        <div class="num">06 / GOVERNANCE</div>
+        <h3>Compartilhamento e melhoria contínua</h3>
+        <p>A Rhapsody não termina no feedback. O valor aumenta quando o usuário repete, comenta e compartilha com intenção clara.</p>
+      </aside>
+      <div class="panel rev">
+        <div class="panel-head"><span>module.collaboration</span><span>user-controlled</span></div>
+        <div class="panel-body">
+          <table class="matrix">
+            <thead>
+              <tr><th>Ação</th><th>Como funciona</th><th>Boa prática</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Compartilhar</td><td>Envie um run para gestor, colega ou equipe. O compartilhamento é uma escolha do usuário.</td><td>Compartilhe com contexto: objetivo do treino, dúvida principal e ponto que deseja discutir.</td></tr>
+              <tr><td>Relançar</td><td>Repita o mesmo use case sempre que quiser.</td><td>Faça uma nova tentativa aplicando uma recomendação específica do debriefing anterior.</td></tr>
+              <tr><td>Comentar</td><td>Envie sugestões de melhoria para o cenário, como “o personagem poderia ser mais agressivo”.</td><td>Descreva comportamento esperado, intensidade e impacto no aprendizado.</td></tr>
+            </tbody>
+          </table>
+          <div class="terminal" aria-label="Ciclo de melhoria">
+            <div class="panel-head"><span>learning_loop</span><span>repeatable</span></div>
+            <pre><span class="prompt">loop</span>:
+  1. praticar o cenário
+  2. revisar debriefing e script
+  3. escolher um comportamento para melhorar
+  4. relançar o use case
+  5. comparar a nova tentativa
+  6. compartilhar apenas quando fizer sentido para o desenvolvimento</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="seguranca">
+    <div class="wrap doc-block">
+      <aside class="doc-label rev">
+        <div class="num">07 / SECURITY</div>
+        <h3>Segurança, privacidade e LGPD</h3>
+        <p>Bloco para orientar uso responsável, especialmente em contextos corporativos e treinamentos com dados sensíveis.</p>
+      </aside>
+      <div class="panel rev">
+        <div class="panel-head"><span>module.privacy_baseline</span><span>lgpd-aware</span></div>
+        <div class="panel-body">
+          <div class="cards">
+            <article class="card"><div class="icon">S</div><h4>Acesso controlado</h4><p>Use somente credenciais autorizadas e não compartilhe sessões com pessoas fora do público previsto.</p></article>
+            <article class="card"><div class="icon">P</div><h4>Dados pessoais</h4><p>Evite inserir dados reais de clientes, como documentos, telefones, endereços ou informações sensíveis.</p></article>
+            <article class="card"><div class="icon">G</div><h4>Governança</h4><p>Runs compartilhados devem ter finalidade de aprendizagem, com consentimento e contexto claro para quem recebe.</p></article>
+          </div>
+          <div class="callout ok">
+            <strong>Orientação de conformidade</strong>
+            <p>Ao usar exemplos reais, anonimize nomes, números e referências. Prefira descrever a situação de forma genérica e preservar detalhes que identifiquem clientes ou colaboradores.</p>
+          </div>
+          <div class="callout warn">
+            <strong>Uso ético do feedback</strong>
+            <p>O debriefing deve apoiar desenvolvimento. Evite transformar uma simulação isolada em julgamento definitivo de competência.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="suporte">
+    <div class="wrap doc-block">
+      <aside class="doc-label rev">
+        <div class="num">08 / SUPPORT</div>
+        <h3>Troubleshooting rápido</h3>
+        <p>Checklist de primeira resposta para orientar usuários antes de acionar suporte técnico.</p>
+      </aside>
+      <div class="panel rev">
+        <div class="panel-head"><span>module.support_checklist</span><span>first response</span></div>
+        <div class="panel-body">
+          <table class="matrix">
+            <thead>
+              <tr><th>Sintoma</th><th>Verificação</th><th>Ação recomendada</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Use cases incorretos</td><td>Perfil, cargo ou trilha carregada não parecem compatíveis.</td><td>Registrar evidência e acionar gestor ou suporte para revisão de perfil.</td></tr>
+              <tr><td>IA não escuta</td><td>Permissão de microfone, fone conectado e botão de fala no estado correto.</td><td>Autorizar microfone no dispositivo, testar áudio e reiniciar a sessão se necessário.</td></tr>
+              <tr><td>Idioma inesperado</td><td>Idioma padrão do perfil e idioma específico da sessão.</td><td>Ajustar nas configurações do perfil ou antes de passar ao Run.</td></tr>
+              <tr><td>Nota não aparece</td><td>A nota só é gerada mediante solicitação.</td><td>Solicitar a avaliação numérica na área de resultados do run.</td></tr>
+              <tr><td>Run não encontrado</td><td>Histórico e filtros aplicados na lista.</td><td>Limpar filtros, pesquisar o use case e validar se a sessão foi concluída.</td></tr>
+            </tbody>
+          </table>
+          <div class="print-note">
+            <div>
+              <strong>Manual pronto para distribuição</strong>
+              <p>Use o navegador para apresentar, imprimir em PDF ou compartilhar como arquivo HTML junto do logo local.</p>
+            </div>
+            <a class="btn" href="#top">Voltar ao início</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <p><strong> rhapsody</strong>Manual técnico de uso · 2026</p>
+    </div>
+    <p class="footer-meta">Tecnologia francesa adaptada ao Brasil<br>Prática simulada, feedback estruturado e evolução contínua</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const reveal = new IntersectionObserver((entries)=>{
+    entries.forEach((entry)=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add("in");
+        reveal.unobserve(entry.target);
+      }
+    });
+  },{threshold:.12,rootMargin:"0px 0px -40px 0px"});
+  document.querySelectorAll(".rev").forEach((el)=>reveal.observe(el));
+
+  const navLinks = Array.from(document.querySelectorAll(".nav-links a[href^='#']"));
+  const sections = navLinks
+    .map((link)=>document.querySelector(link.getAttribute("href")))
+    .filter(Boolean);
+
+  const spy = new IntersectionObserver((entries)=>{
+    entries.forEach((entry)=>{
+      if(!entry.isIntersecting) return;
+      navLinks.forEach((link)=>link.classList.toggle("active", link.getAttribute("href") === "#" + entry.target.id));
+    });
+  },{threshold:.2,rootMargin:"-30% 0px -55% 0px"});
+
+  sections.forEach((section)=>spy.observe(section));
+})();
+</script>
+</body>
+</html>
